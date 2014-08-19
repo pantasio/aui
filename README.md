@@ -69,3 +69,95 @@ You can try it first with a `virtualbox`
 - Many More...
 
 If you like my work, please consider a small Paypal donation at helmuthdu@gmail.com :)
+
+#!/bin/bash
+
+pacman -Sy git
+git clone git://github.com/pantasio/aui
+
+#this is shell help
+# sau khi phan partition
+# fdisk -l
+#Now is time to create disk file system and format partitions with ext4. Issue the following 
+
+commands for ROOT and HOME partitions.
+
+# mkfs.ext4 /dev/sda1                day la ROOT
+# mkfs.ext4 /dev/sda5                day la HOME
+
+Format and initialize SWAP partition.
+
+# mkswap /dev/sda2
+# swapon /dev/sda2
+
+#Now run lsblk command to double check partitions and make sure everything is in correctly 
+
+configured so far.
+
+#For performing an Arch Linux installation the two partitions created must be mount it on 
+
+Arch Live running system to a mount point to be accessible. For this setup I shall use the 
+
+/mnt Arch system live path to mount ROOT partition (/dev/sda1) and /mnt/home path to mount 
+
+HOME partition (/dev/sda5). Don’t be worried about SWAP partition (it’s has already been 
+
+initialized above). Use the following commands in the following order for this step.
+
+# mount /dev/sda1 /mnt
+# mkdir /mnt/home
+# mount /dev/sda5 /mnt/home
+
+
+EDITOR # nano /etc/pacman.d/mirrorlist
+
+## Viet Nam
+#Server = http://f.archlinuxvn.org/archlinux/$repo/os/$arch
+#Server = http://mirror-fpt-telecom.fpt.net/archlinux/$repo/os/$arch
+
+
+
+#bat dau install
+# pacstrap -i /mnt base base-devel
+
+#After all packages are installed it’s time to generate fstab file for our new Arch Linux 
+
+system to be able to boot from newly partitions with the help of the following command.
+
+# genfstab -U -p /mnt >> /mnt/etc/fstab
+
+
+#After the system reboots you will lose network connection and your Network Interface Card 
+
+name will change. To manage this issue, login with newly created user with sudo powers and 
+
+issue the following command to get NIC Ethernet name.
+# ip link
+
+
+#After you get the name of the Ethernet connection start and enable the connection on 
+
+Ethernet NIC running the following commands.
+# sudo systemctl enable dhcpcd@ens33.service
+# sudo systemctl start dhcpcd@ens33.service
+
+If you have multiple network interfaces on DHCP run the following command and verify 
+
+connectivity issuing a ping command against google domain.
+# sudo systemctl enable dhcpcd.service
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
