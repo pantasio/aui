@@ -72,6 +72,33 @@ If you like my work, please consider a small Paypal donation at helmuthdu@gmail.
 
 #!/bin/bash
 
+After the installer decompresses and loads the Linux Kernel you will be automatically thrown to an Arch Linux Bash terminal (TTY) with root privileges. A good step now is to verify your network connection and Hard Drives by issuing the following commands.
+# ping –c3 google.com
+# fdisk –l
+
+The next step is to chunk and prepare your Hard Disk partitions. For this stage you can use Fdisk or Cfdisk utilities to perform a disk partition layout for MBR disks or Gdisk for GPT disks. I recommend Cfdisk for its guidance and simplicity in use.
+For a basic layout partition table use the following structure.
+Root partition (/dev/sda1) with at least 20G size as Primary with Boot flag, ext4 formatted.
+Swap partition (/dev/sda2) with 2xRAM size as Primary, Swap On.
+Home partition (/dev/sda5) with the rest of space as Extended, ext4 formatted.
+
+For now your partition table has been written to HDD MRB but no file system was yet created on top of it. You can also get a better partition table review by running fdisk –l command again.
+# fdisk -l
+
+Now is time to create disk file system and format partitions with ext4. Issue the following commands for ROOT and HOME partitions.
+# mkfs.ext4 /dev/sda1
+# mkfs.ext4 /dev/sda5
+
+Format and initialize SWAP partition.
+# mkswap /dev/sda2
+# swapon /dev/sda2
+
+Now run lsblk command to double check partitions and make sure everything is in correctly configured so far.
+#lsblk
+
+
+
+
 pacman -Sy git
 git clone git://github.com/pantasio/aui
 
